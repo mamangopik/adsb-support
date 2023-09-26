@@ -1,7 +1,7 @@
 import socket
 
 # Define the remote server address
-remote_server_address = ('remote_host', 30003)  # Replace 'remote_host' with the actual hostname or IP address
+remote_server_address = ('localhost', 30003)  # Replace 'remote_host' with the actual hostname or IP address
 
 # Create a socket object
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
