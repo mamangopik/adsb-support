@@ -16,7 +16,7 @@ try:
     client_socket.settimeout(30)
 
     while True:
-        time.sleep(0.1)
+        time.sleep(0.3)
         # Receive and print data from the remote server
         data = client_socket.recv(1024)  # 1024 is the buffer size
         if not data:
