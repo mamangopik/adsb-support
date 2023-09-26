@@ -1,4 +1,5 @@
 import socket
+import time
 
 # Define the remote server address
 remote_server_address = ('localhost', 30003)  # Replace 'remote_host' with the actual hostname or IP address
@@ -15,6 +16,7 @@ try:
     client_socket.settimeout(30)
 
     while True:
+        time.sleep(0.1)
         # Receive and print data from the remote server
         data = client_socket.recv(1024)  # 1024 is the buffer size
         if not data:
