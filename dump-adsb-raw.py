@@ -12,7 +12,8 @@ def on_connect(client, userdata, flags, rc):
         print(f"Connection failed with error code {rc}")
 
 data_buffer = {
-    'distance':[]
+    'distance':[],
+    'other_info':[]
 }
 
 
@@ -59,21 +60,23 @@ try:
             distance = extarctor.get_distance(str(line.strip()))
             parsed_message = extarctor.parse_adsb_message(str(line.strip()))
             print(parsed_message)
-            if distance > 0 and len(parsed_message)>10:
+            if distance > 0:
                 print(">>>>>>",distance)
                 data_buffer['distance'].append(distance)
+                data_buffer['other_info'].append(parsed_message)
         if len(data_buffer['distance'])>20:
             try:
                 converted_datetime = str(unix_timestamp_to_datetime(time.time()))
                 payload = {
                     'distance_message_km':data_buffer['distance'],
                     'timestamp':converted_datetime,
-                    'other_info':parsed_message
+                    'other_info':data_buffer['other_info']
                 }
                 mqtt_msg = json.dumps(payload)
                 push_mqtt(str(mqtt_msg))
                 print('message sent to mqtt broker')
                 data_buffer['distance']=[] #reset buffer
+                data_buffer['other_info']=[] #reset buffer
             except Exception as e:
                 print(e)
 
