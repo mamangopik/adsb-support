@@ -42,8 +42,6 @@ try:
     # Connect to the remote server
     client_socket.connect(remote_server_address)
     print(f"Connected to {remote_server_address[0]}:{remote_server_address[1]}")
-    # Set a timeout for receiving data (30 seconds)
-    client_socket.settimeout(10)
     while True:
         time.sleep(0.5)
         # Receive and print data from the remote server
