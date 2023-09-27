@@ -72,10 +72,10 @@ try:
                     'timestamp':converted_datetime,
                     'other_info':data_buffer['other_info']
                 }
-                print("===================================")
-                print(payload)
-                print("===================================")
                 mqtt_msg = json.dumps(payload)
+                print("===================================")
+                print(str(mqtt_msg))
+                print("===================================")
                 push_mqtt(str(mqtt_msg))
                 print('message sent to mqtt broker')
                 data_buffer['distance']=[] #reset buffer
