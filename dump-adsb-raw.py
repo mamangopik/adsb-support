@@ -65,8 +65,8 @@ try:
         lines = str(data.decode('utf-8'))
         lines = lines.split('\n')
         for line in lines:
-            print(line)
-            distance = extarctor.get_distance(line)
+            print(line.strip())
+            distance = extarctor.get_distance(line.strip())
             if distance:
                 print(distance)
 

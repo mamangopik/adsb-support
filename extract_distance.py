@@ -48,16 +48,16 @@ class adsb_to_distance():
                         return distance
                     else:
                         print("data not contains location value or invalid")
-                        return -1
+                        return 0
                 else:
                     print("data not contains location value or invalid")
-                    return -1
+                    return 0
             else:
                 print("data not contains location value or invalid")
-                return -1
+                return 0
         except:
             print("data not contains location value or invalid")
-            return -1
+            return 0
 
 if __name__ == '__main__':
     # Coordinates for comparison
