@@ -4,7 +4,11 @@ import json
 import paho.mqtt.client as mqtt
 import datetime
 
-
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Connected to MQTT broker")
+    else:
+        print(f"Connection failed with error code {rc}")
 
 data_buffer = {
     'raw_data':[]
@@ -30,6 +34,8 @@ def push_mqtt(message):
     topic = "/adsb/nutech/log/message_dump"  # The MQTT topic to publish to
     # Create an MQTT client
     client = mqtt.Client(str(time.time()))
+    # Set the "on connect" callback function
+    client.on_connect = on_connect
     # Connect to the MQTT broker
     client.connect(broker_address, broker_port)
     # Publish a message
