@@ -53,13 +53,14 @@ try:
         data_buffer['raw_data'].append(data.decode('utf-8'))
         if len(data_buffer['raw_data'])>50:
             try:
-                converted_datetime = str(unix_timestamp_to_datetime(unix_timestamp))
+                converted_datetime = str(unix_timestamp_to_datetime(time.time()))
                 payload = {
                     'message':data_buffer['raw_data'],
                     'timestamp':converted_datetime
                 }
                 mqtt_msg = json.dumps(payload)
                 push_mqtt(str(mqtt_msg))
+                print('message sent to mqtt broker')
                 data_buffer['raw_data']=[] #reset buffer
             except Exception as e:
                 print(e)
