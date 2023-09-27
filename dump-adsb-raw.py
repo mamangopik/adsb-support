@@ -17,8 +17,11 @@ data_buffer = {
 
 
 
+# Coordinates for comparison
 target_coordinates = (-6.27831, 106.82939)
 extarctor  = extract_distance.adsb_to_distance(target_coordinates)
+# data = "MSG,3,1,1,8A09A6,1,2023/09/27,11:33:53.224,2023/09/27,11:33:53.249,,7075,,,-6.24657,107.26738,,,0,,0,0"
+# print(extarctor.get_distance(data))
 
 # Define the remote server address
 remote_server_address = ('localhost', 30003)  # Replace 'remote_host' with the actual hostname or IP address

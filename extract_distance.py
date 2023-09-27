@@ -4,9 +4,6 @@ from geopy.distance import geodesic
 class adsb_to_distance():
     def __init__(self,target):
         self.target_coordinates = target
-        # Initialize variables
-        self.unique_messages = {}
-        self.result = []
     # Function to calculate the distance between two sets of latitude and longitude coordinates
     def calculate_distance(self,coord1, coord2):
         """
@@ -42,7 +39,7 @@ class adsb_to_distance():
                 if message:
                     if 'latitude' in message:
                         coordinates = (message['latitude'], message['longitude'])
-                        distance = self.calculate_distance(target_coordinates, coordinates)
+                        distance = self.calculate_distance(self.target_coordinates, coordinates)
                         print(coordinates)
                         print(distance)
                         return distance
@@ -59,28 +56,14 @@ class adsb_to_distance():
             print("data not contains location value or invalid")
             return 0
 
-if __name__ == '__main__':
-    # Coordinates for comparison
-    target_coordinates = (-6.27831, 106.82939)
-    extarctor  = adsb_to_distance(target_coordinates)
-    data = "MSG,3,1,1,8A02AE,1,2023/09/27,11:30:39.519,2023/09/27,11:30:39.575,,20200,,,-6.32414,106.61864,,,0,,0,0"
-    print(extarctor.get_distance(data))
-    # # Process each line
-    # try:
-    #     data = "MSG,3,1,1,8A0516,1,2023/09/27,09:35:30.564,2023/09/27,09:35:30.618,,22525,,,-5.96241,108.01180,,,0,,0,0"
-    #     if data.startswith("MSG"):
-    #         message = extarctor.parse_adsb_message(data)
-    #         if message:
-    #             if 'latitude' in message:
-    #                 coordinates = (message['latitude'], message['longitude'])
-    #                 distance = extarctor.calculate_distance(target_coordinates, coordinates)
-    #                 print(coordinates)
-    #                 print(distance)
-    #             else:
-    #                 print("data not contains location value or invalid")
-    #         else:
-    #             print("data not contains location value or invalid")
-    #     else:
-    #         print("data not contains location value or invalid")
-    # except:
-    #     print("data not contains location value or invalid")
+target_coordinates = (-6.27831, 106.82939)
+extarctor  = adsb_to_distance(target_coordinates)
+data = "MSG,3,1,1,8A09A6,1,2023/09/27,11:33:53.224,2023/09/27,11:33:53.249,,7075,,,-6.24657,107.26738,,,0,,0,0"
+print(extarctor.get_distance(data))
+
+# if __name__ == '__main__':
+#     # Coordinates for comparison
+#     target_coordinates = (-6.27831, 106.82939)
+#     extarctor  = adsb_to_distance(target_coordinates)
+#     data = "MSG,3,1,1,8A09A6,1,2023/09/27,11:33:53.224,2023/09/27,11:33:53.249,,7075,,,-6.24657,107.26738,,,0,,0,0"
+#     print(extarctor.get_distance(data))
