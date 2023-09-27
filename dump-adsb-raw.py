@@ -75,9 +75,9 @@ try:
                 print("===================================")
                 print(payload)
                 print("===================================")
-                # mqtt_msg = json.dumps(payload)
-                # push_mqtt(str(mqtt_msg))
-                # print('message sent to mqtt broker')
+                mqtt_msg = json.dumps(payload)
+                push_mqtt(str(mqtt_msg))
+                print('message sent to mqtt broker')
                 data_buffer['distance']=[] #reset buffer
                 data_buffer['other_info']=[] #reset buffer
             except Exception as e:
