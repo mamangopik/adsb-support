@@ -54,14 +54,15 @@ try:
         data = client_socket.recv(1024)
         if not data:
             break 
-        lines = str(data.decode('utf-8'))
-        lines = lines.split('\n')
-        for line in lines:
-            distance = extarctor.get_distance(str(line.strip()))
-            if distance:
-                # print(parsed_message)
-                # print(">>>>>>",distance)
-                data_buffer['distance'].append(distance)
+        try:
+            lines = str(data.decode('utf-8'))
+            lines = lines.split('\n')
+            for line in lines:
+                distance = extarctor.get_distance(str(line.strip()))
+                if distance:
+                    data_buffer['distance'].append(distance)
+        except:
+            pass
         if len(data_buffer['distance'])>20:
             try:
                 converted_datetime = str(unix_timestamp_to_datetime(time.time()))
@@ -70,14 +71,9 @@ try:
                     'timestamp':converted_datetime
                 }
                 mqtt_msg = str(json.dumps(payload))
-                # mqtt_msg = mqtt_msg.replace('"', '\u0022')
-                # print("===================================")
-                # print(str(mqtt_msg))
-                # print("===================================")
                 push_mqtt(mqtt_msg)
                 print('message sent to mqtt broker')
                 data_buffer['distance']=[] #reset buffer
-                data_buffer['other_info']=[] #reset buffer
             except Exception as e:
                 print(e)
 
