@@ -41,8 +41,8 @@ class adsb_to_distance():
                     if 'latitude' in message:
                         coordinates = (message['latitude'], message['longitude'])
                         distance = self.calculate_distance(self.target_coordinates, coordinates)
-                        print(coordinates)
-                        print(distance)
+                        # print(coordinates)
+                        # print(distance)
                         return distance
                     else:
                         # print("data not contains location value or invalid")
