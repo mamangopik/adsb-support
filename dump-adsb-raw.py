@@ -33,7 +33,7 @@ def push_mqtt(message):
     broker_port = 1883  # Default MQTT port
     topic = "/adsb/nutech/log/message_dump"  # The MQTT topic to publish to
     # Create an MQTT client
-    client = mqtt.Client()
+    client = mqtt.Client('adsb'+str(time.time()))
     # Set the "on connect" callback function
     client.on_connect = on_connect
     # Connect to the MQTT broker
