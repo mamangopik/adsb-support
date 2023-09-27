@@ -1,11 +1,5 @@
 import socket
 import time
-import json
-import paho.mqtt.client as mqtt
-
-data_buffer = {
-    'raw_data':[]
-}
 
 # Define the remote server address
 remote_server_address = ('localhost', 30003)  # Replace 'remote_host' with the actual hostname or IP address
@@ -13,20 +7,7 @@ remote_server_address = ('localhost', 30003)  # Replace 'remote_host' with the a
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
-def push_mqtt():
-    # Define MQTT broker information
-    broker_address = "broker.hivemq.com"  # Replace with your MQTT broker address
-    broker_port = 1883  # Default MQTT port
-    topic = "test/topic"  # The MQTT topic to publish to
-    # Create an MQTT client
-    client = mqtt.Client()
-    # Connect to the MQTT broker
-    client.connect(broker_address, broker_port)
-    # Publish a message
-    message = "Hello, MQTT!"
-    client.publish(topic, message)
-    # Disconnect from the broker
-    client.disconnect()
+t_start = time.time()
 
 try:
     # Connect to the remote server
@@ -40,14 +21,10 @@ try:
         data = client_socket.recv(1024)  # 1024 is the buffer size
         if not data:
             break  # No more data, break the loop
-        # print(f"Received data: {data.decode('utf-8')}")
-        data_buffer['raw_data'].append(data.decode('utf-8'))
-        if len(data_buffer['raw_data'])>50:
-            try:
-                push_mqtt(data)
-                data_buffer['raw_data']=[] #reset buffer
-            except:
-                pass
+        print(f"Received data: {data.decode('utf-8')}")
+        if(time.time()-t_start > 60):
+            print("program run for 60 seconds")
+            break
 
 except ConnectionRefusedError:
     print("Connection to the remote server was refused.")
