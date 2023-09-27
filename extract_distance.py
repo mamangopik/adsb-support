@@ -24,11 +24,9 @@ class adsb_to_distance():
         parts = message.split(',')
         if len(parts) >= 22 and parts[14] and parts[15]:
             return {
-                'type': parts[1],
-                'timestamp': str(datetime.strptime(parts[6] + ' ' + parts[7], '%Y/%m/%d %H:%M:%S.%f')),
                 'latitude': float(parts[14]),
                 'longitude': float(parts[15]),
-                'ICAO':parts[4]
+                'ICAO':str(parts[4]),
             }
         else:
             return None
