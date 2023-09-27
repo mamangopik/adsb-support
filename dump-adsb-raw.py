@@ -20,8 +20,6 @@ data_buffer = {
 # Coordinates for comparison
 target_coordinates = (-6.27831, 106.82939)
 extarctor  = extract_distance.adsb_to_distance(target_coordinates)
-# data = "MSG,3,1,1,8A09A6,1,2023/09/27,11:33:53.224,2023/09/27,11:33:53.249,,7075,,,-6.24657,107.26738,,,0,,0,0"
-# print(extarctor.get_distance(data))
 
 # Define the remote server address
 remote_server_address = ('localhost', 30003)  # Replace 'remote_host' with the actual hostname or IP address
@@ -37,21 +35,14 @@ def unix_timestamp_to_datetime(unix_timestamp):
         return None
 
 def push_mqtt(message):
-    # Define MQTT broker information
-    broker_address = "broker.hivemq.com"  # Replace with your MQTT broker address
-    broker_port = 1883  # Default MQTT port
-    topic = "/adsb/nutech/log/message_dump"  # The MQTT topic to publish to
-    # Create an MQTT client
+    broker_address = "broker.hivemq.com"
+    broker_port = 1883
+    topic = "/adsb/nutech/log/message_dump"  
     client = mqtt.Client('adsb'+str(time.time()))
-    # Set the "on connect" callback function
     client.on_connect = on_connect
-    # Connect to the MQTT broker
     client.connect(broker_address, broker_port)
     time.sleep(2)
-    # Publish a message
     client.publish(topic, message)
-    # Disconnect from the broker
-    # print(message)
     client.disconnect()
 
 try:
@@ -59,16 +50,15 @@ try:
     client_socket.connect(remote_server_address)
     print(f"Connected to {remote_server_address[0]}:{remote_server_address[1]}")
     while True:
-        # Receive and print data from the remote server
-        data = client_socket.recv(1024)  # 1024 is the buffer size
+        data = client_socket.recv(1024)
         if not data:
-            break  # No more data, break the loop
-
-        # print(f"Received data: {data.decode('utf-8')}")
+            break 
         lines = str(data.decode('utf-8'))
         lines = lines.split('\n')
         for line in lines:
             distance = extarctor.get_distance(str(line.strip()))
+            parsed_message = extarctor.parse_adsb_message(str(line.strip()))
+            print(parsed_message)
             if distance > 0:
                 print(">>>>>>",distance)
                 data_buffer['distance'].append(distance)

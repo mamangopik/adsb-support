@@ -28,6 +28,7 @@ class adsb_to_distance():
                 'timestamp': datetime.strptime(parts[6] + ' ' + parts[7], '%Y/%m/%d %H:%M:%S.%f'),
                 'latitude': float(parts[14]),
                 'longitude': float(parts[15]),
+                'ICAO':parts[4]
             }
         else:
             return None
