@@ -2,6 +2,9 @@ import socket
 import time
 import json
 import paho.mqtt.client as mqtt
+import datetime
+
+
 
 data_buffer = {
     'raw_data':[]
@@ -12,18 +15,24 @@ remote_server_address = ('localhost', 30003)  # Replace 'remote_host' with the a
 # Create a socket object
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+def unix_timestamp_to_datetime(unix_timestamp):
+    try:
+        # Convert the Unix timestamp to a datetime object
+        return datetime.datetime.fromtimestamp(unix_timestamp)
+    except Exception as e:
+        print(f"Error converting Unix timestamp: {e}")
+        return None
 
-def push_mqtt():
+def push_mqtt(message):
     # Define MQTT broker information
     broker_address = "broker.hivemq.com"  # Replace with your MQTT broker address
     broker_port = 1883  # Default MQTT port
-    topic = "test/topic"  # The MQTT topic to publish to
+    topic = "/adsb/nutech/log/message_dump"  # The MQTT topic to publish to
     # Create an MQTT client
     client = mqtt.Client()
     # Connect to the MQTT broker
     client.connect(broker_address, broker_port)
     # Publish a message
-    message = "Hello, MQTT!"
     client.publish(topic, message)
     # Disconnect from the broker
     client.disconnect()
@@ -44,10 +53,16 @@ try:
         data_buffer['raw_data'].append(data.decode('utf-8'))
         if len(data_buffer['raw_data'])>50:
             try:
-                push_mqtt(data)
+                converted_datetime = str(unix_timestamp_to_datetime(unix_timestamp))
+                payload = {
+                    'message':data_buffer['raw_data'],
+                    'timestamp':converted_datetime
+                }
+                mqtt_msg = json.dumps(payload)
+                push_mqtt(str(mqtt_msg))
                 data_buffer['raw_data']=[] #reset buffer
-            except:
-                pass
+            except Exception as e:
+                print(e)
 
 except ConnectionRefusedError:
     print("Connection to the remote server was refused.")
