@@ -38,7 +38,7 @@ def push_mqtt(message):
     client.on_connect = on_connect
     # Connect to the MQTT broker
     client.connect(broker_address, broker_port)
-    time.sleep(5)
+    time.sleep(10)
     # Publish a message
     client.publish(topic, message)
     # Disconnect from the broker
