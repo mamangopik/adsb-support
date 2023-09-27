@@ -68,7 +68,6 @@ try:
         lines = str(data.decode('utf-8'))
         lines = lines.split('\n')
         for line in lines:
-            print(f">{str(line.strip())}<")
             distance = extarctor.get_distance(str(line.strip()))
             if distance > 0:
                 print(">>>>>>",distance)
