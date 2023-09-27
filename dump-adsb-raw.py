@@ -59,7 +59,7 @@ try:
             distance = extarctor.get_distance(str(line.strip()))
             parsed_message = extarctor.parse_adsb_message(str(line.strip()))
             print(parsed_message)
-            if distance > 0:
+            if distance > 0 and parsed_message is not None:
                 print(">>>>>>",distance)
                 data_buffer['distance'].append(distance)
         if len(data_buffer['distance'])>20:
@@ -73,7 +73,7 @@ try:
                 mqtt_msg = json.dumps(payload)
                 push_mqtt(str(mqtt_msg))
                 print('message sent to mqtt broker')
-                data_buffer['raw_data']=[] #reset buffer
+                data_buffer['distance']=[] #reset buffer
             except Exception as e:
                 print(e)
 
