@@ -61,7 +61,7 @@ try:
         if not data:
             break  # No more data, break the loop
 
-        print(f"Received data: {data.decode('utf-8')}")
+        # print(f"Received data: {data.decode('utf-8')}")
         lines = data.decode('utf-8')
         lines = data.split('\n')
         for line in lines():
