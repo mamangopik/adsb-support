@@ -76,6 +76,8 @@ try:
                 print("===================================")
                 print(str(mqtt_msg))
                 print("===================================")
+                print(type(str(mqtt_msg)))
+                print("===================================")
                 push_mqtt(str(mqtt_msg))
                 print('message sent to mqtt broker')
                 data_buffer['distance']=[] #reset buffer
