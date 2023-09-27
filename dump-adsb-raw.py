@@ -33,15 +33,16 @@ def push_mqtt(message):
     broker_port = 1883  # Default MQTT port
     topic = "/adsb/nutech/log/message_dump"  # The MQTT topic to publish to
     # Create an MQTT client
-    client = mqtt.Client(str(time.time()))
+    client = mqtt.Client()
     # Set the "on connect" callback function
     client.on_connect = on_connect
     # Connect to the MQTT broker
     client.connect(broker_address, broker_port)
+    time.sleep(2)
     # Publish a message
     client.publish(topic, message)
     # Disconnect from the broker
-    print(message[0:50])
+    print(message[0:100])
     client.disconnect()
 
 try:
@@ -49,7 +50,6 @@ try:
     client_socket.connect(remote_server_address)
     print(f"Connected to {remote_server_address[0]}:{remote_server_address[1]}")
     while True:
-        time.sleep(0.5)
         # Receive and print data from the remote server
         data = client_socket.recv(1024)  # 1024 is the buffer size
         if not data:
