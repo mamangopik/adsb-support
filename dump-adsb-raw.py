@@ -59,7 +59,7 @@ try:
             distance = extarctor.get_distance(str(line.strip()))
             parsed_message = extarctor.parse_adsb_message(str(line.strip()))
             print(parsed_message)
-            if distance > 0 and parsed_message is not None:
+            if distance > 0 and len(parsed_message)>10:
                 print(">>>>>>",distance)
                 data_buffer['distance'].append(distance)
         if len(data_buffer['distance'])>20:
