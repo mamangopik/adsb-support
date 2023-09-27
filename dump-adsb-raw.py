@@ -47,11 +47,11 @@ def push_mqtt(message):
     client.on_connect = on_connect
     # Connect to the MQTT broker
     client.connect(broker_address, broker_port)
-    time.sleep(10)
+    time.sleep(2)
     # Publish a message
-    client.publish(topic, 'message')
+    client.publish(topic, message)
     # Disconnect from the broker
-    print(message)
+    # print(message)
     client.disconnect()
 
 try:
@@ -76,7 +76,7 @@ try:
             try:
                 converted_datetime = str(unix_timestamp_to_datetime(time.time()))
                 payload = {
-                    'distance_message':data_buffer['distance'],
+                    'distance_message_km':data_buffer['distance'],
                     'timestamp':converted_datetime
                 }
                 mqtt_msg = json.dumps(payload)
