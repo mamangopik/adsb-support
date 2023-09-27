@@ -58,12 +58,10 @@ try:
         lines = lines.split('\n')
         for line in lines:
             distance = extarctor.get_distance(str(line.strip()))
-            parsed_message = extarctor.parse_adsb_message(str(line.strip()))
             if distance > 0:
                 # print(parsed_message)
                 # print(">>>>>>",distance)
-                data_buffer['distance'].append(distance)
-                data_buffer['other_info'].append(str(parsed_message))
+                data_buffer['distance'].append(str(json.dumps(distance)))
         if len(data_buffer['distance'])>20:
             try:
                 converted_datetime = str(unix_timestamp_to_datetime(time.time()))

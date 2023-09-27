@@ -41,7 +41,12 @@ class adsb_to_distance():
                         distance = self.calculate_distance(self.target_coordinates, coordinates)
                         # print(coordinates)
                         # print(distance)
-                        return distance
+                        return {
+                            'distance':distance,
+                            'ICAO':message['ICAO'],
+                            'longitude':message['longitude'],
+                            'latitude':message['latitude']
+                        }
                     else:
                         # print("data not contains location value or invalid")
                         return 0
