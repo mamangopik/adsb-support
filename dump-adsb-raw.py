@@ -60,10 +60,14 @@ try:
         data = client_socket.recv(1024)  # 1024 is the buffer size
         if not data:
             break  # No more data, break the loop
+
         print(f"Received data: {data.decode('utf-8')}")
-        distance = extarctor.get_distance(str(data.decode('utf-8').strip()))
-        if distance:
-            print(distance)
+        lines = data.decode('utf-8')
+        lines = data.split('\n')
+        for line in lines():
+            distance = extarctor.get_distance(str(data.decode('utf-8').strip()))
+            if distance:
+                print(distance)
 
 
         # data_buffer['raw_data'].append(data.decode('utf-8'))
