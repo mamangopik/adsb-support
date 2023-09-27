@@ -3,6 +3,7 @@ import time
 import json
 import paho.mqtt.client as mqtt
 import datetime
+import extract_distance
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -13,6 +14,11 @@ def on_connect(client, userdata, flags, rc):
 data_buffer = {
     'raw_data':[]
 }
+
+
+
+target_coordinates = (-6.27831, 106.82939)
+extarctor  = extract_distance.adsb_to_distance(target_coordinates)
 
 # Define the remote server address
 remote_server_address = ('localhost', 30003)  # Replace 'remote_host' with the actual hostname or IP address
@@ -54,21 +60,26 @@ try:
         data = client_socket.recv(1024)  # 1024 is the buffer size
         if not data:
             break  # No more data, break the loop
-        # print(f"Received data: {data.decode('utf-8')}")
-        data_buffer['raw_data'].append(data.decode('utf-8'))
-        if len(data_buffer['raw_data'])>2:
-            try:
-                converted_datetime = str(unix_timestamp_to_datetime(time.time()))
-                payload = {
-                    'message':data_buffer['raw_data'],
-                    'timestamp':converted_datetime
-                }
-                mqtt_msg = json.dumps(payload)
-                push_mqtt(str(mqtt_msg))
-                print('message sent to mqtt broker')
-                data_buffer['raw_data']=[] #reset buffer
-            except Exception as e:
-                print(e)
+        print(f"Received data: {data.decode('utf-8')}")
+        distance = extarctor.get_distance(str(data.decode('utf-8').strip()))
+        if distance:
+            print(distance)
+
+
+        # data_buffer['raw_data'].append(data.decode('utf-8'))
+        # if len(data_buffer['raw_data'])>2:
+        #     try:
+        #         converted_datetime = str(unix_timestamp_to_datetime(time.time()))
+        #         payload = {
+        #             'message':data_buffer['raw_data'],
+        #             'timestamp':converted_datetime
+        #         }
+        #         mqtt_msg = json.dumps(payload)
+        #         push_mqtt(str(mqtt_msg))
+        #         print('message sent to mqtt broker')
+        #         data_buffer['raw_data']=[] #reset buffer
+        #     except Exception as e:
+        #         print(e)
 
 except ConnectionRefusedError:
     print("Connection to the remote server was refused.")
