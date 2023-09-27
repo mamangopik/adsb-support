@@ -62,8 +62,8 @@ try:
             break  # No more data, break the loop
 
         # print(f"Received data: {data.decode('utf-8')}")
-        lines = data.decode('utf-8')
-        lines = data.split('\n')
+        lines = str(data.decode('utf-8'))
+        lines = lines.split('\n')
         for line in lines():
             distance = extarctor.get_distance(str(data.decode('utf-8').strip()))
             if distance:
