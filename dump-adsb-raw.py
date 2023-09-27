@@ -67,7 +67,7 @@ try:
         for line in lines:
             print(line.strip())
             distance = extarctor.get_distance(line.strip())
-            if distance:
+            if distance > 0:
                 print(distance)
 
 
