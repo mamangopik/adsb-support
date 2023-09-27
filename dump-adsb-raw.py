@@ -40,7 +40,7 @@ def push_mqtt(message):
     client.connect(broker_address, broker_port)
     time.sleep(10)
     # Publish a message
-    client.publish(topic, message)
+    client.publish(topic, 'message')
     # Disconnect from the broker
     print(message)
     client.disconnect()
