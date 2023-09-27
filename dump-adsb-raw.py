@@ -42,7 +42,7 @@ def push_mqtt(message):
     # Publish a message
     client.publish(topic, message)
     # Disconnect from the broker
-    print(message[0:100])
+    print(message)
     client.disconnect()
 
 try:
@@ -56,7 +56,7 @@ try:
             break  # No more data, break the loop
         # print(f"Received data: {data.decode('utf-8')}")
         data_buffer['raw_data'].append(data.decode('utf-8'))
-        if len(data_buffer['raw_data'])>50:
+        if len(data_buffer['raw_data'])>2:
             try:
                 converted_datetime = str(unix_timestamp_to_datetime(time.time()))
                 payload = {
