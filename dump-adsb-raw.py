@@ -69,7 +69,8 @@ try:
                 converted_datetime = str(unix_timestamp_to_datetime(time.time()))
                 payload = {
                     'distance_message_km':data_buffer['distance'],
-                    'timestamp':converted_datetime
+                    'timestamp':converted_datetime,
+                    'other_info':data_buffer['other_info']
                 }
                 mqtt_msg = str(json.dumps(payload))
                 mqtt_msg = mqtt_msg.replace('"', '\u0022')
