@@ -42,7 +42,7 @@ def push_mqtt(message):
     client = mqtt.Client('adsb'+str(time.time()))
     client.on_connect = on_connect
     client.connect(broker_address, broker_port)
-    time.sleep(2)
+    time.sleep(5)
     client.publish(topic, message)
     client.disconnect()
 
@@ -72,7 +72,9 @@ try:
                     'timestamp':converted_datetime,
                     'other_info':data_buffer['other_info']
                 }
+                print("===================================")
                 print(payload)
+                print("===================================")
                 # mqtt_msg = json.dumps(payload)
                 # push_mqtt(str(mqtt_msg))
                 # print('message sent to mqtt broker')
