@@ -44,26 +44,22 @@ class adsb_to_distance():
                         print(distance)
                         return distance
                     else:
-                        print("data not contains location value or invalid")
+                        # print("data not contains location value or invalid")
                         return 0
                 else:
-                    print("data not contains location value or invalid")
+                    # print("data not contains location value or invalid")
                     return 0
             else:
-                print("data not contains location value or invalid")
+                # print("data not contains location value or invalid")
                 return 0
         except:
-            print("data not contains location value or invalid")
+            # print("data not contains location value or invalid")
             return 0
 
-target_coordinates = (-6.27831, 106.82939)
-extarctor  = adsb_to_distance(target_coordinates)
-data = "MSG,3,1,1,8A09A6,1,2023/09/27,11:33:53.224,2023/09/27,11:33:53.249,,7075,,,-6.24657,107.26738,,,0,,0,0"
-print(extarctor.get_distance(data))
 
-# if __name__ == '__main__':
-#     # Coordinates for comparison
-#     target_coordinates = (-6.27831, 106.82939)
-#     extarctor  = adsb_to_distance(target_coordinates)
-#     data = "MSG,3,1,1,8A09A6,1,2023/09/27,11:33:53.224,2023/09/27,11:33:53.249,,7075,,,-6.24657,107.26738,,,0,,0,0"
-#     print(extarctor.get_distance(data))
+
+if __name__ == '__main__':
+    target_coordinates = (-6.27831, 106.82939)
+    extarctor  = adsb_to_distance(target_coordinates)
+    data = "MSG,3,1,1,8A09A6,1,2023/09/27,11:33:53.224,2023/09/27,11:33:53.249,,7075,,,-6.24657,107.26738,,,0,,0,0"
+    print(extarctor.get_distance(data))

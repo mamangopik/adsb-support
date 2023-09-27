@@ -12,7 +12,7 @@ def on_connect(client, userdata, flags, rc):
         print(f"Connection failed with error code {rc}")
 
 data_buffer = {
-    'raw_data':[]
+    'distance':[]
 }
 
 
@@ -71,22 +71,20 @@ try:
             distance = extarctor.get_distance(str(line.strip()))
             if distance > 0:
                 print(">>>>>>",distance)
-
-
-        # data_buffer['raw_data'].append(data.decode('utf-8'))
-        # if len(data_buffer['raw_data'])>2:
-        #     try:
-        #         converted_datetime = str(unix_timestamp_to_datetime(time.time()))
-        #         payload = {
-        #             'message':data_buffer['raw_data'],
-        #             'timestamp':converted_datetime
-        #         }
-        #         mqtt_msg = json.dumps(payload)
-        #         push_mqtt(str(mqtt_msg))
-        #         print('message sent to mqtt broker')
-        #         data_buffer['raw_data']=[] #reset buffer
-        #     except Exception as e:
-        #         print(e)
+                data_buffer['distance'].append(distance)
+        if len(data_buffer['distance'])>20:
+            try:
+                converted_datetime = str(unix_timestamp_to_datetime(time.time()))
+                payload = {
+                    'distance_message':data_buffer['distance'],
+                    'timestamp':converted_datetime
+                }
+                mqtt_msg = json.dumps(payload)
+                push_mqtt(str(mqtt_msg))
+                print('message sent to mqtt broker')
+                data_buffer['raw_data']=[] #reset buffer
+            except Exception as e:
+                print(e)
 
 except ConnectionRefusedError:
     print("Connection to the remote server was refused.")
