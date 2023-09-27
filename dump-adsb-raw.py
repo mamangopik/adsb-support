@@ -46,43 +46,31 @@ def push_mqtt(message):
     client.publish(topic, message)
     client.disconnect()
 
-try:
-    # Connect to the remote server
-    client_socket.connect(remote_server_address)
-    print(f"Connected to {remote_server_address[0]}:{remote_server_address[1]}")
-    while True:
-        data = client_socket.recv(1024)
-        if not data:
-            break 
+# Connect to the remote server
+client_socket.connect(remote_server_address)
+print(f"Connected to {remote_server_address[0]}:{remote_server_address[1]}")
+while True:
+    data = client_socket.recv(1024)
+    try:
+        lines = str(data.decode('utf-8'))
+        lines = lines.split('\n')
+        for line in lines:
+            distance = extarctor.get_distance(str(line.strip()))
+            if distance:
+                data_buffer['distance'].append(distance)
+    except:
+        pass
+    if len(data_buffer['distance'])>20:
         try:
-            lines = str(data.decode('utf-8'))
-            lines = lines.split('\n')
-            for line in lines:
-                distance = extarctor.get_distance(str(line.strip()))
-                if distance:
-                    data_buffer['distance'].append(distance)
-        except:
-            pass
-        if len(data_buffer['distance'])>20:
-            try:
-                converted_datetime = str(unix_timestamp_to_datetime(time.time()))
-                payload = {
-                    'distance_message_km':data_buffer['distance'],
-                    'timestamp':converted_datetime
-                }
-                mqtt_msg = str(json.dumps(payload))
-                push_mqtt(mqtt_msg)
-                print('message sent to mqtt broker')
-                data_buffer['distance']=[] #reset buffer
-            except Exception as e:
-                print(e)
-
-except ConnectionRefusedError:
-    print("Connection to the remote server was refused.")
-except socket.timeout:
-    print("Connection timed out.")
-except KeyboardInterrupt:
-    print("Client stopped by the user.")
-finally:
-    # Close the client socket
-    client_socket.close()
+            converted_datetime = str(unix_timestamp_to_datetime(time.time()))
+            payload = {
+                'distance_message_km':data_buffer['distance'],
+                'timestamp':converted_datetime
+            }
+            mqtt_msg = str(json.dumps(payload))
+            push_mqtt(mqtt_msg)
+            print('message sent to mqtt broker')
+            data_buffer['distance']=[] #reset buffer
+        except Exception as e:
+            print(e)
+client_socket.close()
