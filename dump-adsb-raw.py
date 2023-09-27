@@ -65,10 +65,10 @@ try:
         lines = str(data.decode('utf-8'))
         lines = lines.split('\n')
         for line in lines:
-            print(line.strip())
-            distance = extarctor.get_distance(line.strip())
+            print(str(line.strip()))
+            distance = extarctor.get_distance(str(line.strip()))
             if distance > 0:
-                print(distance)
+                print(">>>>>>",distance)
 
 
         # data_buffer['raw_data'].append(data.decode('utf-8'))

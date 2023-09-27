@@ -63,7 +63,7 @@ if __name__ == '__main__':
     # Coordinates for comparison
     target_coordinates = (-6.27831, 106.82939)
     extarctor  = adsb_to_distance(target_coordinates)
-    data = "MSG,3,1,1,8A0516,1,2023/09/27,09:35:30.564,2023/09/27,09:35:30.618,,22525,,,-5.96241,108.01180,,,0,,0,0"
+    data = "MSG,3,1,1,8A02AE,1,2023/09/27,11:30:39.519,2023/09/27,11:30:39.575,,20200,,,-6.32414,106.61864,,,0,,0,0"
     print(extarctor.get_distance(data))
     # # Process each line
     # try:
