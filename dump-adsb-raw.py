@@ -58,7 +58,7 @@ try:
         lines = lines.split('\n')
         for line in lines:
             distance = extarctor.get_distance(str(line.strip()))
-            if distance[0]>0:
+            if distance>0:
                 # print(parsed_message)
                 # print(">>>>>>",distance)
                 data_buffer['distance'].append(distance)
