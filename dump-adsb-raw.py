@@ -63,7 +63,7 @@ try:
                 # print(parsed_message)
                 # print(">>>>>>",distance)
                 data_buffer['distance'].append(distance)
-                data_buffer['other_info'].append(parsed_message)
+                data_buffer['other_info'].append(str(parsed_message))
         if len(data_buffer['distance'])>20:
             try:
                 converted_datetime = str(unix_timestamp_to_datetime(time.time()))
