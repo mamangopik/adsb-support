@@ -78,5 +78,6 @@ while True:
         except Exception as e:
             print(e)
         data_buffer['distance']=[] #reset buffer
+        start_time = time.time()
 
 client_socket.close()
