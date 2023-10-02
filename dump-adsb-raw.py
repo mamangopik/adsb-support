@@ -71,9 +71,8 @@ while True:
             mqtt_msg = str(json.dumps(payload))
             push_mqtt(mqtt_msg)
             print('message sent to mqtt broker')
-            data_buffer['distance']=[] #reset buffer
         except Exception as e:
             print(e)
-        # data_buffer['distance']=[] #reset buffer
+        data_buffer['distance']=[] #reset buffer
 
 client_socket.close()
