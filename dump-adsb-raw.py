@@ -49,6 +49,8 @@ def push_mqtt(message):
 # Connect to the remote server
 client_socket.connect(remote_server_address)
 print(f"Connected to {remote_server_address[0]}:{remote_server_address[1]}")
+
+start_time = time.time()
 while True:
     print(len(data_buffer['distance']))
     data = client_socket.recv(1024)
@@ -61,7 +63,9 @@ while True:
                 data_buffer['distance'].append(distance)
     except:
         pass
-    if len(data_buffer['distance'])>20:
+
+    elapsed_time = time.time()-start_time
+    if elapsed_time > 30:
         try:
             converted_datetime = str(unix_timestamp_to_datetime(time.time()))
             payload = {
