@@ -65,7 +65,7 @@ while True:
         pass
 
     elapsed_time = time.time()-start_time
-    if elapsed_time > 30:
+    if elapsed_time > 15:
         try:
             converted_datetime = str(unix_timestamp_to_datetime(time.time()))
             payload = {
