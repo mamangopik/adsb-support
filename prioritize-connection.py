@@ -43,10 +43,12 @@ def main():
     failCount = 0
     afterDown = False
     try:
+        print('1')
         call(['set-eth0-priority.sh'], stdout=DEVNULL, stderr=DEVNULL)
         # connectivity_logger.info("Connection Interface has been prioritized to "+connectivity)
         pass
     except:
+        print('2')
         # connectivity_logger.error("Failed to prioritize Interface to "+connectivity)
         # connectivity_logger
         pass
@@ -54,43 +56,54 @@ def main():
     time.sleep(3)
 
     while True:
+        print('3')
         rc = ping()
         if(rc[1]):
+            print('4')
             print(rc[1])
             # dotenv.set_key(server_config_file, "HAS_CONNECTION",
             #                "False", quote_mode="never")
             # subprocess.run(["systemctl", "restart", "openfortivpn.service"])
         else:
+            print('5')
             # dotenv.set_key(server_config_file, "HAS_CONNECTION",
             #     "True", quote_mode="never")
             pass
 
         # if ping no response success after 10s
         if rc[0]:
+            print('6')
             print(rc)
             if failCount < 7:
+                print('7')
                 failCount += 1
                 # connectivity_logger.info('Connection Down')
                 time.sleep(3)
                 try:
+                    print('8')
                     # call(['start-modem.sh'], stdout=DEVNULL, stderr=DEVNULL)
                     if connectivity == 'eno1':
+                        print('9')
                         connectivity = 'wlo1'
                         call(['set-wlan0-priority.sh'], stdout=DEVNULL, stderr=DEVNULL)
                     elif connectivity == 'wlo1':
+                        print('10')
                         connectivity = 'eno1'
                         call(['set-eth0-priority.sh'], stdout=DEVNULL, stderr=DEVNULL)
                     # connectivity_logger.info("Connection Interface has been prioritized to "+connectivity)
                     time.sleep(5)
                     # continue
                 except:
+                    print('11')
                     # connectivity_logger.error("Failed to prioritize Interface to "+connectivity)
                     pass
             else:
+                print('12')
                 #schedule.run_pending()
                 pass
         # ping succes
         else:
+            print('13')
             failCount = 0
 
             # wait 10s before check connection again
