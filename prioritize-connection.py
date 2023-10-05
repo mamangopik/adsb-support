@@ -78,9 +78,6 @@ def main():
                         connectivity = 'wlo1'
                         call(['set-wlan0-priority.sh'], stdout=DEVNULL, stderr=DEVNULL)
                     elif connectivity == 'wlo1':
-                        connectivity = 'wwan0'
-                        call(['set-wwan0-priority.sh'], stdout=DEVNULL, stderr=DEVNULL)
-                    elif connectivity == 'wwan0':
                         connectivity = 'eno1'
                         call(['set-eth0-priority.sh'], stdout=DEVNULL, stderr=DEVNULL)
                     # connectivity_logger.info("Connection Interface has been prioritized to "+connectivity)
