@@ -1,4 +1,5 @@
 import subprocess
+import time
 
 # Define the list of network interfaces to test
 interfaces = ["eno1", "wlo1"]
@@ -24,7 +25,7 @@ def get_ping_metrics(interface):
 
         return rtt, packet_loss
     except subprocess.CalledProcessError as e:
-        # Handle errors, e.g., if ping fails
+        # Handle errors, e.g., if ping fa3.ils
         return None, None
 
 
@@ -105,12 +106,21 @@ def find_lower_and_best():
     if (lower_old_iface is not None) and (lower_old_iface_metric is not None) and (best_iface is not None) and (best_iface_metric is not None) and best_iface:
         # print("unsorted routes",metric)
         # print("sorted routes",sorted_routes)
+
         print("lower iface",lower_old_iface,end=' ')
         print("with metric",lower_old_iface_metric)
         print("best iface",best_iface,end=' ')
         print("best metric",best_iface_metric)
         print(f"RTT: {best_rtt} ms")
         print(f"Packet Loss: {best_packet_loss}%")
+
+        try:
+            subprocess.run(["ifmetric", best_iface, str(lower_old_iface_metric)], check=True)
+            time.sleep(5)
+            subprocess.run(["ifmetric", lower_old_iface, str(best_iface_metric)], check=True)
+            time.sleep(5)
+        except subprocess.CalledProcessError as e:
+            print(f"Error setting metric for {interface_name}: {e}")
     else:
         print("something went wrong")
 
