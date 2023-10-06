@@ -1,5 +1,5 @@
 [Unit]
-Description=mqtt logger
+Description=adsb network manager
 After=multi-user.target
 
 [Service]
