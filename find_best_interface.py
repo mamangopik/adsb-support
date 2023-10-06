@@ -1,4 +1,5 @@
 import subprocess
+import time
 
 # Define the list of network interfaces to test
 interfaces = ["eno1", "wlo1"]
@@ -24,32 +25,8 @@ def get_ping_metrics(interface):
 
         return rtt, packet_loss
     except subprocess.CalledProcessError as e:
-        # Handle errors, e.g., if ping fails
+        # Handle errors, e.g., if ping fa3.ils
         return None, None
-
-# Initialize variables to track the best interface
-best_interface = None
-best_rtt = float("inf")
-best_packet_loss = 100.0
-
-# Loop through the interfaces and find the best one
-for interface in interfaces:
-    rtt, packet_loss = get_ping_metrics(interface)
-    if rtt is not None and packet_loss is not None:
-        if rtt < best_rtt or (rtt == best_rtt and packet_loss < best_packet_loss):
-            best_interface = interface
-            best_rtt = rtt
-            best_packet_loss = packet_loss
-
-# Print the best interface and metrics
-if best_interface:
-    print(f"Best Interface: {best_interface}")
-    print(f"RTT: {best_rtt} ms")
-    print(f"Packet Loss: {best_packet_loss}%")
-else:
-    print("No valid interface found or all interfaces failed.")
-
-
 
 
 # You can add logic here to set the best interface as the default route if desired.
@@ -74,11 +51,77 @@ def get_metric():
 
             iface = cols[7]
             metric = cols[4]
-            ret_val.append({iface:metric})
+            ret_val.append({iface:int(metric)})
         return ret_val
     except subprocess.CalledProcessError as e:
         print(f"Error executing 'route -n': {e}")
         return {'interface':null,'metric':99999}
 
-metric = get_metric()
-print(metric)
+# Define a custom key function to extract the value for sorting
+def custom_key(route):
+    if 'eno1' in route:
+        return route['eno1']
+    elif 'wlo1' in route:
+        return route['wlo1']
+    else:
+        return 0  # Default value in case neither 'eno1' nor 'wlo1' key is present
+
+
+
+def find_lower_and_best():
+    # Initialize variables to track the best interface
+    best_iface = None
+    best_iface_metric = None
+    best_rtt = float("inf")
+    best_packet_loss = 100.0
+
+    routes = get_metric()
+    sorted_routes = sorted(routes, key=custom_key)
+
+    # Loop through the interfaces and find the best one
+    for interface in interfaces:
+        rtt, packet_loss = get_ping_metrics(interface)
+        if rtt is not None and packet_loss is not None:
+            if rtt < best_rtt or (rtt == best_rtt and packet_loss < best_packet_loss):
+                best_iface = interface
+                best_rtt = rtt
+                best_packet_loss = packet_loss
+    
+    try:
+        lower_old = sorted_routes[0]
+        lower_old_iface = list(lower_old.keys())[0]
+        lower_old_iface_metric = lower_old[lower_old_iface]
+
+        for route in sorted_routes:
+            try:
+                metric = route[best_iface]
+                best_iface_metric = metric
+                break
+            except:
+                pass
+
+    except:
+        pass
+    
+    if (lower_old_iface is not None) and (lower_old_iface_metric is not None) and (best_iface is not None) and (best_iface_metric is not None) and best_iface:
+        # print("unsorted routes",metric)
+        # print("sorted routes",sorted_routes)
+
+        print("lower iface",lower_old_iface,end=' ')
+        print("with metric",lower_old_iface_metric)
+        print("best iface",best_iface,end=' ')
+        print("best metric",best_iface_metric)
+        print(f"RTT: {best_rtt} ms")
+        print(f"Packet Loss: {best_packet_loss}%")
+
+        try:
+            subprocess.run(["ifmetric", best_iface, str(lower_old_iface_metric)], check=True)
+            time.sleep(5)
+            subprocess.run(["ifmetric", lower_old_iface, str(best_iface_metric)], check=True)
+            time.sleep(5)
+        except subprocess.CalledProcessError as e:
+            print(f"Error setting metric for {interface_name}: {e}")
+    else:
+        print("something went wrong")
+
+find_lower_and_best()
