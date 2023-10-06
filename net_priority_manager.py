@@ -46,11 +46,11 @@ def switch_metric(roll):
         try:
             print("network priority changes!")
             subprocess.run(["ifmetric", 'eth0', str(metric_val[0])], check=True)
-            time.sleep(1)
+            time.sleep(5)
             subprocess.run(["ifmetric", 'wlan0', str(metric_val[1])], check=True)
-            time.sleep(1)
+            time.sleep(5)
             subprocess.run(["ifmetric", 'wwan0', str(metric_val[2])], check=True)
-            time.sleep(1)
+            time.sleep(5)
             last_roll = roll
         except:
             pass
@@ -59,12 +59,15 @@ def switch_metric(roll):
 def metric_rule():
     if ping_result['eth0']: #priority eth0
         switch_metric(0)
+        print("priority eth0")
     else:
         if ping_result['wlan0']: #priority wlan0
             switch_metric(1)
+            print("priority wlan0")
         else:
             if ping_result['wwan0']: #priority wwan0
                 switch_metric(2)
+                print("priority wwan0")
             else:
                 print("not connected to internet")
 
