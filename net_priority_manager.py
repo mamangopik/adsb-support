@@ -36,7 +36,7 @@ def switch_metric(roll):
     global last_roll
     metric_val = []
     if roll == 0:  #priority eth0
-        metric_val = [200,400.600]
+        metric_val = [200,400,600]
     if roll == 1: #priority wlan0
         metric_val = [600,200,400]
     if roll == 2: #priority wwan0
