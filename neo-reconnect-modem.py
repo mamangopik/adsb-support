@@ -94,6 +94,13 @@ def soft_reset_modem():
     else:
         modem_logger.error('restart modem failed')
 
+def reset_modem():
+    soft_reset_modem()
+    time.sleep(5)
+    resetModemPwr()
+    time.sleep(5)
+    modem_logger.info('reset modem OK')
+
 # def init_service():
 #     try:
 #         resetModemPwr()
@@ -109,34 +116,37 @@ def main():
     no_connection_cnt=0
     soft_reset_cnt = 0
     while 1:
-        print(f"==========================")
         RC = get_ping_metrics("wwan0")
         print("RC=",RC)
-        print(f"==========================\n\n")   
         if RC == 0:
             no_connection_cnt=0
             soft_reset_cnt = 0
+            modem_logger.info('got connection')
         elif RC == 1:
             no_connection_cnt +=1
         else:
             modem_logger.info('restart modem service')
             sys.exit()
 
+        if no_connection_cnt%5==0 and no_connection_cnt>0:
+            reset_modem()
+
 
         #jika 5x ping tidak ada koneksi internet
-        if no_connection_cnt%5==0 and no_connection_cnt>0:
-            print("soft reset modem")
-            soft_reset_modem()
-            soft_reset_cnt += 1
+        # if no_connection_cnt%5==0 and no_connection_cnt>0:
+        #     print("soft reset modem")
+        #     soft_reset_modem()
+        #     soft_reset_cnt += 1
 
-        if soft_reset_cnt%3==0 and soft_reset_cnt>0:
-            try:
-                resetModemPwr()
-                modem_logger.info('hard reset modem OK')
-                soft_reset_cnt += 1
-                time.sleep(2)
-            except:
-                modem_logger.error('failed to hard reset modem')
+        # if soft_reset_cnt%3==0 and soft_reset_cnt>0:
+        #     try:
+        #         no_connection_cnt +=1
+        #         resetModemPwr()
+        #         modem_logger.info('hard reset modem OK')
+        #         soft_reset_cnt += 1
+        #         time.sleep(2)
+        #     except:
+        #         modem_logger.error('failed to hard reset modem')
         time.sleep(1)
 
 
