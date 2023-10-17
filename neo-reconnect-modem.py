@@ -100,6 +100,14 @@ def reset_modem():
     resetModemPwr()
     time.sleep(5)
     modem_logger.info('reset modem OK')
+    try:
+        call(['start-modem.sh'])
+        modem_logger.info('Start Modem')
+        status[1]=1
+        time.sleep(5)
+    except:
+        modem_logger.error('Failed start Modem')
+        status[1]=0
 
 # def init_service():
 #     try:
