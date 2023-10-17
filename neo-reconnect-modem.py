@@ -105,7 +105,7 @@ def init_service():
         init_modem()
         modem_logger.error('failed to hard reset modem')
 def main():
-    init_service()
+    init_modem()
     time.sleep(5)
     no_connection_cnt=0
     soft_reset_cnt = 0
@@ -119,14 +119,24 @@ def main():
         if RC == 1:
             no_connection_cnt +=1
         if RC == 2:
-            sys.exit()
             modem_logger.info('restart modem service')
+            sys.exit()
 
 
         #jika 5x ping tidak ada koneksi internet
-        if no_connection_cnt%5==0 and no_connection_cnt>0:
+        if no_connection_cnt%7==0 and no_connection_cnt>0:
             print("soft reset modem")
             soft_reset_modem()
+            soft_reset_cnt += 1
+        if soft_reset_cnt%3==0 and soft_reset_cnt>0:
+            try:
+                resetModemPwr()
+                modem_logger.info('hard reset modem OK')
+                time.sleep(5)
+            except:
+                modem_logger.error('failed to hard reset modem')
+                time.sleep(5)
+
         time.sleep(5)
 
 
