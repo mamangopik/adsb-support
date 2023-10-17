@@ -16,7 +16,7 @@ import dotenv
 test_server = "8.8.8.8"
 
 LOG_FORMAT = "%(asctime)s %(levelname)s %(message)s:%(lineno)d"
-MODEM_LOG_FILE = '/home/hidayat/log/modem.log'
+MODEM_LOG_FILE = '/home/ravinder/log/modem.log'
 modem_logger = logging.getLogger('modem_logging')
 modem_logger.setLevel(logging.DEBUG)
 modem_logger_file = TimedRotatingFileHandler(
