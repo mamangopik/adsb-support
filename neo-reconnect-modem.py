@@ -64,7 +64,6 @@ def init_modem():
         modem_logger.info("Init Modem")
     except:
         modem_logger.error("Failed Init Modem")
-        modem_logger
 
 def soft_reset_modem():
     status = [0,0]
@@ -95,15 +94,15 @@ def soft_reset_modem():
     else:
         modem_logger.error('restart modem failed')
 
-def init_service():
-    try:
-        resetModemPwr()
-        modem_logger.info('hard reset modem OK')
-        time.sleep(5)
-        init_modem()
-    except:
-        init_modem()
-        modem_logger.error('failed to hard reset modem')
+# def init_service():
+#     try:
+#         resetModemPwr()
+#         modem_logger.info('hard reset modem OK')
+#         time.sleep(5)
+#         init_modem()
+#     except:
+#         init_modem()
+#         modem_logger.error('failed to hard reset modem')
 def main():
     init_modem()
     time.sleep(5)
@@ -128,6 +127,7 @@ def main():
             print("soft reset modem")
             soft_reset_modem()
             soft_reset_cnt += 1
+
         if soft_reset_cnt%3==0 and soft_reset_cnt>0:
             try:
                 resetModemPwr()
@@ -136,7 +136,6 @@ def main():
             except:
                 modem_logger.error('failed to hard reset modem')
                 time.sleep(5)
-
         time.sleep(5)
 
 
