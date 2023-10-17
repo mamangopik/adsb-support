@@ -11,12 +11,9 @@ import schedule
 import sys
 import dotenv
 
-# from gpiozero import Buzzer
 
 # Define the list of network interfaces to test
-interfaces = ["wwan0","wlo1","eno1"]
 test_server = "8.8.8.8"
-ping_result = {}
 
 LOG_FORMAT = "%(asctime)s %(levelname)s %(message)s:%(lineno)d"
 MODEM_LOG_FILE = '/home/hidayat/log/modem.log'
@@ -29,13 +26,19 @@ modem_logger_file.setFormatter(Formatter(LOG_FORMAT))
 modem_logger.addHandler(modem_logger_file)
 
 
-# def resetModemPwr():
-#     modemRst = Buzzer(26)
-#     modem_logger.info("Hard Reset Modem")
-#     modemRst.on()
-#     time.sleep(3)
-#     modemRst.off()
-#     time.sleep(10)
+try:
+    from gpiozero import Buzzer
+except Exception as e:
+    modem_logger.error(str(e))
+
+
+def resetModemPwr():
+    modemRst = Buzzer(26)
+    modem_logger.info("Hard Reset Modem")
+    modemRst.on()
+    time.sleep(3)
+    modemRst.off()
+    time.sleep(10)
 
 def get_ping_metrics(interface):
     ping_result = subprocess.call(
@@ -54,6 +57,7 @@ def get_ping_metrics(interface):
 def restart_service():
     modem_logger.info("restart service")
     sys.exit()
+
 def init_modem():
     try:
         call(['start-modem.sh'])
@@ -91,16 +95,39 @@ def soft_reset_modem():
     else:
         modem_logger.error('restart modem failed')
 
-
-
+def init_service():
+    try:
+        resetModemPwr()
+        modem_logger.info('hard reset modem OK')
+        time.sleep(5)
+        init_modem()
+    except:
+        init_modem()
+        modem_logger.error('failed to hard reset modem')
 def main():
+    init_service()
+    time.sleep(5)
+    no_connection_cnt=0
+    soft_reset_cnt = 0
     while 1:
-        for interface in interfaces:
-            print(f"============{interface}==============")
-            RC = get_ping_metrics(interface)
-            print("RC=",RC)
-            print(f"============{interface}==============\n\n")   
-        time.sleep(3)
+        print(f"==========================")
+        RC = get_ping_metrics("wwan0")
+        print("RC=",RC)
+        print(f"==========================\n\n")   
+        if RC == 0:
+            pass
+        if RC == 1:
+            no_connection_cnt +=1
+        if RC == 2:
+            sys.exit()
+            modem_logger.info('restart modem service')
+
+
+        #jika 5x ping tidak ada koneksi internet
+        if no_connection_cnt%5==0 and no_connection_cnt>0:
+            print("soft reset modem")
+            soft_reset_modem()
+        time.sleep(5)
 
 
 if __name__ == "__main__":
