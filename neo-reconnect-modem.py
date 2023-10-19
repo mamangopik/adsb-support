@@ -57,12 +57,13 @@ def get_ping_metrics(interface):
 
 def restart_service():
     modem_logger.info("restart service")
+    time.sleep(10)
     sys.exit()
 
 def init_modem():
     try:
-        subprocess.Popen("start-modem.sh", shell=True)
-        # call(['start-modem.sh'])
+        # subprocess.Popen("start-modem.sh", shell=True)
+        call(['start-modem.sh'])
         modem_logger.info("Init Modem")
     except:
         modem_logger.error("Failed Init Modem")
@@ -98,29 +99,7 @@ def soft_reset_modem():
     else:
         modem_logger.error('restart modem failed')
 
-def reset_modem():
-    soft_reset_modem()
-    time.sleep(5)
-    resetModemPwr()
-    time.sleep(5)
-    modem_logger.info('reset modem OK')
-    try:
-        subprocess.Popen("start-modem.sh", shell=True)
-        # call(['start-modem.sh'])
-        modem_logger.info('Start Modem')
-        time.sleep(5)
-    except:
-        modem_logger.error('Failed start Modem')
 
-# def init_service():
-#     try:
-#         resetModemPwr()
-#         modem_logger.info('hard reset modem OK')
-#         time.sleep(5)
-#         init_modem()
-#     except:
-#         init_modem()
-#         modem_logger.error('failed to hard reset modem')
 def main():
     init_modem()
     time.sleep(5)
