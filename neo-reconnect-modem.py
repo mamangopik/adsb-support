@@ -94,7 +94,7 @@ def soft_reset_modem():
 
     try:
         process=subprocess.Popen(["start-modem.sh"], shell=False)
-        time.sleep(60)
+        time.sleep(90)
         if process.poll() is None:
             process.kill()
             modem_logger.warning('start modem run too long,process terminated')
