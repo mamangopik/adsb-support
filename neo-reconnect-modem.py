@@ -111,7 +111,7 @@ def main():
         if RC == 0:
             no_connection_cnt=0
             soft_reset_cnt = 0
-            modem_logger.info('got connection')
+            # modem_logger.info('got connection')
         elif RC == 1:
             no_connection_cnt +=1
         else:
