@@ -6,6 +6,7 @@ from logging import Formatter
 import subprocess
 import time
 from subprocess import call
+import subprocess
 from subprocess import DEVNULL
 import schedule
 import sys
@@ -45,7 +46,7 @@ def get_ping_metrics(interface):
         ["ping", "-I", interface, "-c", "4", "-q", test_server]
     )
     ping_result=str(ping_result)
-    print("Result",ping_result)
+    # print("Result",ping_result)
     RC = int(ping_result.split('\n')[-1])
     try:
         return RC
@@ -60,7 +61,8 @@ def restart_service():
 
 def init_modem():
     try:
-        call(['start-modem.sh'])
+        subprocess.Popen("start-modem.sh", shell=True)
+        # call(['start-modem.sh'])
         modem_logger.info("Init Modem")
     except:
         modem_logger.error("Failed Init Modem")
@@ -69,7 +71,8 @@ def soft_reset_modem():
     status = [0,0]
     modem_logger.info('Soft Reset Modem')
     try:
-        call(['stop-modem.sh'])
+        subprocess.Popen("stop-modem.sh", shell=True)
+        # call(['stop-modem.sh'])
         modem_logger.info('stop modem')
         status[0]=1
     except:
@@ -79,7 +82,8 @@ def soft_reset_modem():
     time.sleep(3)
 
     try:
-        call(['start-modem.sh'])
+        subprocess.Popen("start-modem.sh", shell=True)
+        # call(['start-modem.sh'])
         modem_logger.info('Start Modem')
         status[1]=1
         time.sleep(5)
@@ -101,7 +105,8 @@ def reset_modem():
     time.sleep(5)
     modem_logger.info('reset modem OK')
     try:
-        call(['start-modem.sh'])
+        subprocess.Popen("start-modem.sh", shell=True)
+        # call(['start-modem.sh'])
         modem_logger.info('Start Modem')
         time.sleep(5)
     except:
@@ -123,7 +128,7 @@ def main():
     soft_reset_cnt = 0
     while 1:
         RC = get_ping_metrics("wwan0")
-        print("RC=",RC)
+        # print("RC=",RC)
         if RC == 0:
             no_connection_cnt=0
             soft_reset_cnt = 0
@@ -135,7 +140,7 @@ def main():
             sys.exit()
         # jika 5x ping tidak ada koneksi internet
         if no_connection_cnt%5==0 and no_connection_cnt>0:
-            print("soft reset modem")
+            # print("soft reset modem")
             soft_reset_modem()
             soft_reset_cnt += 1
             if soft_reset_cnt%3==0 and soft_reset_cnt>0:
