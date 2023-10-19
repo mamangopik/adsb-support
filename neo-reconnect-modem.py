@@ -73,7 +73,7 @@ def soft_reset_modem():
     modem_logger.info('Soft Reset Modem')
     try:
         process=subprocess.Popen(["./stop-modem.sh"], shell=False)
-        time.sleep(20)
+        time.sleep(30)
         if process.poll() is None:
             process.kill()
         # call(['start-modem.sh'])
@@ -86,8 +86,8 @@ def soft_reset_modem():
     time.sleep(3)
 
     try:
-        subprocess.Popen(["./start-modem.sh"], shell=False)
-        time.sleep(20)
+        process=subprocess.Popen(["./start-modem.sh"], shell=False)
+        time.sleep(30)
         if process.poll() is None:
             process.kill()
         # call(['start-modem.sh'])
